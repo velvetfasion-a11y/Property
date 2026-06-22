@@ -197,12 +197,15 @@
 
     .hero-video-slot video {
       opacity: 0;
-      transition: opacity 2.2s var(--ease-out);
+      visibility: hidden;
+      transition: opacity 3s var(--ease-out), visibility 0s linear 3s;
       will-change: opacity;
     }
 
     .hero-video-slot video.is-visible {
       opacity: 1;
+      visibility: visible;
+      transition: opacity 3s var(--ease-out), visibility 0s linear 0s;
     }
 
     .hero-video-slot video.is-frozen {
@@ -226,12 +229,14 @@
       text-align: center;
       padding: 0 24px;
       max-width: 860px;
-      animation: heroFade 1.2s var(--ease-out) both;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.6s var(--ease-out) 0.4s, transform 1.6s var(--ease-out) 0.4s;
     }
 
-    @keyframes heroFade {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+    .hero.is-ready .hero-content {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .hero-eyebrow {
@@ -281,7 +286,13 @@
       font-size: 9px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      animation: bob 2.5s ease-in-out infinite;
+      opacity: 0;
+      transition: opacity 1.4s var(--ease-out) 1.2s;
+    }
+
+    .hero.is-ready .hero-scroll {
+      opacity: 1;
+      animation: bob 2.5s ease-in-out 1.2s infinite;
     }
 
     .hero-scroll-line {
@@ -1271,7 +1282,10 @@
       <p class="section-sub">
         Strandöen is presented exclusively to qualified buyers. All inquiries are handled with absolute discretion.
       </p>
-      <form class="inquiry-form" id="inquiryForm">
+      <form class="inquiry-form" id="inquiryForm" action="https://formsubmit.co/ajax/info@rense.se" method="POST">
+        <input type="hidden" name="_subject" value="Strandōen — Private Inquiry">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-row">
           <div class="form-group">
             <label for="firstName">First Name</label>
@@ -1354,21 +1368,23 @@
   </div>
 
   <script>
-    // Hero video — start at 0:18, fade in, freeze on the first cut at 0:33
+    // Hero video — fade in when first frame is ready, freeze at end
     (function initHeroVideo() {
+      const hero = document.querySelector('.hero');
       const heroVideo = document.getElementById('heroVideo');
-      if (!heroVideo) return;
+      if (!hero || !heroVideo) return;
 
-      const START_AT = 2; // trimmed hero — was 0:18 in full source
-      const FREEZE_AT = 17; // trimmed hero — was 0:33 in full source
+      const START_AT = 2;
+      const FREEZE_AT = 17;
       let hasFadedIn = false;
       let hasBegun = false;
       let isFrozen = false;
 
-      function fadeIn() {
+      function revealHero() {
         if (hasFadedIn) return;
         hasFadedIn = true;
         heroVideo.classList.add('is-visible');
+        hero.classList.add('is-ready');
       }
 
       function freezeFrame() {
@@ -1377,6 +1393,7 @@
         heroVideo.pause();
         heroVideo.currentTime = FREEZE_AT;
         heroVideo.classList.add('is-visible', 'is-frozen');
+        hero.classList.add('is-ready');
       }
 
       function onTimeUpdate() {
@@ -1397,18 +1414,24 @@
         hasBegun = true;
         heroVideo.currentTime = START_AT;
         tryPlay();
-        fadeIn();
       }
 
-      heroVideo.addEventListener('loadedmetadata', beginPlayback);
-      heroVideo.addEventListener('playing', fadeIn);
+      function onFirstFrame() {
+        revealHero();
+      }
+
+      heroVideo.addEventListener('canplay', beginPlayback);
+      heroVideo.addEventListener('playing', onFirstFrame, { once: true });
       heroVideo.addEventListener('timeupdate', onTimeUpdate);
 
       heroVideo.addEventListener('error', () => {
         if (isFrozen) return;
         hasBegun = false;
+        hasFadedIn = false;
         heroVideo.load();
-        setTimeout(beginPlayback, 400);
+        setTimeout(() => {
+          if (heroVideo.readyState >= 3) beginPlayback();
+        }, 400);
       });
 
       document.addEventListener('visibilitychange', () => {
@@ -1417,16 +1440,15 @@
 
       window.addEventListener('focus', tryPlay);
 
-      const heroSection = document.querySelector('.hero');
-      if (heroSection && 'IntersectionObserver' in window) {
+      if ('IntersectionObserver' in window) {
         new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) tryPlay();
           });
-        }, { threshold: 0.1 }).observe(heroSection);
+        }, { threshold: 0.1 }).observe(hero);
       }
 
-      if (heroVideo.readyState >= 1) beginPlayback();
+      if (heroVideo.readyState >= 3) beginPlayback();
     })();
 
     // Inline chapter videos — autoplay on scroll, loop continuously
@@ -1561,18 +1583,38 @@
       if (e.key === 'Escape' && modal.classList.contains('active')) closeModalFunc();
     });
 
-    // Inquiry form
-    document.getElementById('inquiryForm').addEventListener('submit', (e) => {
+    // Inquiry form — sends to info@rense.se via FormSubmit
+    document.getElementById('inquiryForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector('.form-submit');
+      const form = e.target;
+      const btn = form.querySelector('.form-submit');
       const original = btn.textContent;
-      btn.textContent = 'Inquiry Received';
-      btn.style.background = 'var(--gold-muted)';
-      setTimeout(() => {
-        btn.textContent = original;
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }
+        });
+
+        if (!response.ok) throw new Error('Send failed');
+
+        btn.textContent = 'Inquiry Received';
+        btn.style.background = 'var(--gold-muted)';
+        form.reset();
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      } catch {
+        btn.textContent = 'Please try again';
         btn.style.background = '';
-        e.target.reset();
-      }, 3000);
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = original; }, 3000);
+      }
     });
   </script>
 
