@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Strandöen — A private island estate in the Djursholm archipelago, 15 minutes from Stockholm. Total sovereignty meets global access.">
   <title>STRANDŌEN — Djursholm Private Island, Stockholm</title>
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  </script>
+  <link rel="preload" href="videos/hero.mp4" as="video" type="video/mp4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -198,14 +203,14 @@
     .hero-video-slot video {
       opacity: 0;
       visibility: hidden;
-      transition: opacity 3s var(--ease-out), visibility 0s linear 3s;
+      transition: opacity 2s var(--ease-out), visibility 0s linear 2s;
       will-change: opacity;
     }
 
     .hero-video-slot video.is-visible {
       opacity: 1;
       visibility: visible;
-      transition: opacity 3s var(--ease-out), visibility 0s linear 0s;
+      transition: opacity 2s var(--ease-out), visibility 0s linear 0s;
     }
 
     .hero-video-slot video.is-frozen {
@@ -231,7 +236,7 @@
       max-width: 860px;
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 1.6s var(--ease-out) 0.4s, transform 1.6s var(--ease-out) 0.4s;
+      transition: opacity 1.4s var(--ease-out) 0.25s, transform 1.4s var(--ease-out) 0.25s;
     }
 
     .hero.is-ready .hero-content {
@@ -287,12 +292,12 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       opacity: 0;
-      transition: opacity 1.4s var(--ease-out) 1.2s;
+      transition: opacity 1.2s var(--ease-out) 0.6s;
     }
 
     .hero.is-ready .hero-scroll {
       opacity: 1;
-      animation: bob 2.5s ease-in-out 1.2s infinite;
+      animation: bob 2.5s ease-in-out 0.6s infinite;
     }
 
     .hero-scroll-line {
@@ -1131,7 +1136,7 @@
             muted
             playsinline
             loop
-            preload="metadata"
+            preload="auto"
             disablepictureinpicture
             disableremoteplayback
           >
@@ -1158,7 +1163,7 @@
             muted
             playsinline
             loop
-            preload="metadata"
+            preload="auto"
             disablepictureinpicture
             disableremoteplayback
           >
@@ -1191,7 +1196,7 @@
             muted
             playsinline
             loop
-            preload="metadata"
+            preload="auto"
             disablepictureinpicture
             disableremoteplayback
           >
@@ -1367,22 +1372,21 @@
   </div>
 
   <script>
-    // Hero video — seek first, then play once for a smooth fade-in
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) window.scrollTo(0, 0);
+    });
+
+    // Hero video — preload, play immediately, smooth fade-in, freeze at end
     (function initHeroVideo() {
       const hero = document.querySelector('.hero');
       const heroVideo = document.getElementById('heroVideo');
       if (!hero || !heroVideo) return;
 
-      const START_AT = 2;
-      const FREEZE_AT = 17;
-      let hasFadedIn = false;
+      const FREEZE_AT = 14.9;
       let hasBegun = false;
       let isFrozen = false;
-      let isPreparedPlay = false;
 
       function revealHero() {
-        if (hasFadedIn) return;
-        hasFadedIn = true;
         heroVideo.classList.add('is-visible');
         hero.classList.add('is-ready');
       }
@@ -1403,45 +1407,24 @@
         }
       }
 
-      function playSmoothly() {
-        isPreparedPlay = true;
-        heroVideo.play().catch(() => {
-          isPreparedPlay = false;
-          hasBegun = false;
-        });
-      }
-
-      function beginPlayback() {
+      function startHero() {
         if (isFrozen || hasBegun) return;
-        if (heroVideo.readyState < 2) return;
         hasBegun = true;
-
-        const startAfterSeek = () => {
-          playSmoothly();
-        };
-
-        heroVideo.pause();
-        heroVideo.addEventListener('seeked', startAfterSeek, { once: true });
-        heroVideo.currentTime = START_AT;
-
-        if (Math.abs(heroVideo.currentTime - START_AT) < 0.05) {
-          heroVideo.removeEventListener('seeked', startAfterSeek);
-          startAfterSeek();
-        }
+        heroVideo.play()
+          .then(revealHero)
+          .catch(() => { hasBegun = false; });
       }
 
-      heroVideo.addEventListener('playing', () => {
-        if (isPreparedPlay) revealHero();
-      });
-
-      heroVideo.addEventListener('canplay', beginPlayback, { once: true });
+      heroVideo.addEventListener('canplaythrough', startHero, { once: true });
+      heroVideo.addEventListener('canplay', () => {
+        if (!hasBegun) startHero();
+      }, { once: true });
       heroVideo.addEventListener('timeupdate', onTimeUpdate);
+      heroVideo.addEventListener('ended', freezeFrame);
 
       heroVideo.addEventListener('error', () => {
         if (isFrozen) return;
         hasBegun = false;
-        hasFadedIn = false;
-        isPreparedPlay = false;
         heroVideo.load();
       });
 
@@ -1451,10 +1434,11 @@
         }
       });
 
-      if (heroVideo.readyState >= 2) beginPlayback();
+      heroVideo.load();
+      if (heroVideo.readyState >= 3) startHero();
     })();
 
-    // Inline chapter videos — autoplay on scroll, loop continuously
+    // Inline chapter videos — preload early, play smoothly on scroll
     function initInlineChapterVideo(featureId, videoId) {
       const chapterFeature = document.getElementById(featureId);
       const video = document.getElementById(videoId);
@@ -1465,14 +1449,7 @@
       function beginPlayback() {
         if (hasBegun) return;
         hasBegun = true;
-        video.preload = 'auto';
         video.play().catch(() => { hasBegun = false; });
-      }
-
-      function preloadVideo() {
-        if (hasBegun) return;
-        video.preload = 'auto';
-        video.load();
       }
 
       video.addEventListener('ended', () => {
@@ -1481,28 +1458,24 @@
       });
 
       if ('IntersectionObserver' in window) {
-        const preloadObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) preloadVideo();
-          });
-        }, { rootMargin: '300px 0px', threshold: 0 });
-
         const playObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
               beginPlayback();
-              playObserver.disconnect();
-              preloadObserver.disconnect();
             }
           });
-        }, { threshold: [0, 0.35, 0.5] });
+        }, { rootMargin: '400px 0px', threshold: [0, 0.15, 0.35] });
 
-        preloadObserver.observe(chapterFeature);
         playObserver.observe(chapterFeature);
       } else {
         beginPlayback();
       }
     }
+
+    document.querySelectorAll('.inline-chapter-video').forEach((video) => {
+      video.preload = 'auto';
+      video.load();
+    });
 
     initInlineChapterVideo('chapter01Feature', 'chapter01Video');
     initInlineChapterVideo('chapter02Feature', 'chapter02Video');
