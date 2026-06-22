@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Strandöen — A private island estate in the Djursholm archipelago, 15 minutes from Stockholm. Total sovereignty meets global access.">
+  <title>STRANDŌEN — Djursholm Private Island, Stockholm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #B8956A;
+      --gold-light: #C9A87C;
+      --gold-muted: #9E7E55;
+      --navy: #0E1523;
+      --navy-mid: #141C2E;
+      --cream: #F4F1EB;
+      --cream-dark: #EAE6DC;
+      --white: #FFFFFF;
+      --text-dark: #1A1A1A;
+      --text-mid: #555555;
+      --text-light: #888888;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Jost', sans-serif;
+      --nav-height: 62px;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img, video { display: block; max-width: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: var(--nav-height);
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+
+    nav.scrolled {
+      border-bottom-color: #E8E4DC;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-center {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 9px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--gold-light); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--text-dark);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba(14, 21, 35, 0.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .mobile-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: calc(100vh - var(--nav-height));
+      min-height: 560px;
+      margin-top: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-media,
+    .hero-video-slot,
+    .hero-video-slot video,
+    .hero-video-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .hero-video-slot {
+      background: var(--navy-mid);
+    }
+
+    .hero-video-slot video {
+      opacity: 0;
+      transition: opacity 2.2s var(--ease-out);
+      will-change: opacity;
+    }
+
+    .hero-video-slot video.is-visible {
+      opacity: 1;
+    }
+
+    .hero-video-slot video.is-frozen {
+      will-change: auto;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 14, 26, 0.25) 0%,
+        rgba(8, 14, 26, 0.45) 50%,
+        rgba(8, 14, 26, 0.65) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+      max-width: 860px;
+      animation: heroFade 1.2s var(--ease-out) both;
+    }
+
+    @keyframes heroFade {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6.5vw, 80px);
+      font-weight: 300;
+      line-height: 1.06;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 38px;
+      line-height: 1.6;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      animation: bob 2.5s ease-in-out infinite;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      padding: 14px 30px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+      display: inline-block;
+      text-transform: uppercase;
+      border-radius: 0;
+      font-family: var(--font-body);
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ── GENERAL SECTIONS ── */
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.5vw, 54px);
+      font-weight: 400;
+      text-align: center;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+
+    .section-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-mid);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 60px;
+      line-height: 1.7;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── STATEMENT ── */
+    .statement {
+      padding: 140px 40px;
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .statement-quote {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.35;
+      max-width: 820px;
+      margin: 0 auto 32px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .statement-attribution {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── MAGAZINE ── */
+    .magazine-section {
+      background: var(--navy);
+      padding: 120px 40px 140px;
+    }
+
+    .magazine-section .section-title {
+      color: var(--white);
+    }
+
+    .magazine-section .section-sub {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .video-feature {
+      display: grid;
+      grid-template-columns: 65% 45%;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding-bottom: 24px;
+      position: relative;
+    }
+
+    .video-feature + .video-feature {
+      margin-top: 20px;
+    }
+
+    .video-feature:last-child {
+      margin-bottom: 40px;
+    }
+
+    .feature-media {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-content {
+      grid-column: 2;
+      grid-row: 1;
+      width: auto;
+      background: var(--cream);
+      padding: 60px 50px;
+      margin-top: calc(65% * 9.5 / 16 / 2);
+      margin-left: -10%;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      align-self: start;
+    }
+
+    .video-feature.reverse {
+      grid-template-columns: 45% 65%;
+    }
+
+    .video-feature.reverse .feature-media {
+      grid-column: 2;
+    }
+
+    .video-feature.reverse .feature-content {
+      grid-column: 1;
+      margin-left: 0;
+      margin-right: -10%;
+    }
+
+    .feature-chapter {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text-dark);
+      margin-bottom: 22px;
+    }
+
+    .feature-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    .feature-meta {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .feature-media-inner {
+      background: var(--navy-mid);
+      aspect-ratio: 16 / 9.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-media-inner.is-inline {
+      cursor: default;
+    }
+
+    .feature-media-inner.is-inline::after {
+      display: none;
+    }
+
+    .feature-media-inner.is-inline .inline-chapter-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .feature-media-inner .video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+      opacity: 0.75;
+    }
+
+    .feature-media-inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+      transition: background 0.4s ease;
+    }
+
+    .play-btn {
+      position: relative;
+      z-index: 2;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.4s ease;
+    }
+
+    .play-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      margin-left: 4px;
+    }
+
+    .feature-media-inner:hover .video-bg { transform: scale(1.05); }
+
+    .feature-media-inner:hover::after { background: rgba(0, 0, 0, 0.4); }
+
+    .feature-media-inner:hover .play-btn {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .btn-watch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text-dark);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    .btn-watch:hover {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
+
+    /* ── ESTATE OVERVIEW ── */
+    .estate {
+      padding: 120px 40px;
+      background: var(--cream);
+    }
+
+    .estate-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .estate-image {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+    }
+
+    .estate-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .estate-image::after {
+      content: '';
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(184, 149, 106, 0.4);
+      pointer-events: none;
+    }
+
+    .estate-text .section-eyebrow,
+    .estate-text .section-title { text-align: left; }
+
+    .estate-text .section-title { margin-bottom: 24px; }
+
+    .estate-body {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin-bottom: 40px;
+    }
+
+    .estate-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .stat-item {
+      border-top: 1px solid var(--cream-dark);
+      padding-top: 20px;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--gold-muted);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    /* ── HERITAGE ── */
+    .heritage {
+      padding: 120px 40px;
+      background: var(--white);
+    }
+
+    .heritage-timeline {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .heritage-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--cream-dark);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 48px;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -40px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+
+    .timeline-year {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.75;
+    }
+
+    /* ── INQUIRY ── */
+    .inquiry {
+      padding: 120px 40px;
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .inquiry-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .inquiry .section-eyebrow { color: var(--gold-light); }
+
+    .inquiry .section-title { color: var(--white); }
+
+    .inquiry .section-sub {
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 48px;
+    }
+
+    .inquiry-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+    }
+
+    .form-group select option {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-submit {
+      margin-top: 8px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: center;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .form-submit:hover { background: var(--gold-light); }
+
+    .form-note {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy-mid);
+      padding: 60px 40px 40px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .footer-tagline {
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col a,
+    .footer-col p {
+      display: block;
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--white); }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 48px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── VIDEO MODAL ── */
+    .video-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(14, 21, 35, 0.98);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .video-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      width: 90%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      position: relative;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content video {
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .close-modal:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .feature-content { padding: 40px 30px; }
+      .feature-title { font-size: 28px; }
+      .estate-grid { gap: 48px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; height: 56px; }
+      :root { --nav-height: 56px; }
+
+      .nav-center,
+      .nav-link { display: none; }
+
+      .nav-toggle { display: block; }
+      .mobile-menu { display: flex; }
+
+      .video-feature,
+      .video-feature.reverse {
+        display: block;
+        margin-bottom: 48px;
+        padding-bottom: 0;
+      }
+
+      .video-feature + .video-feature {
+        margin-top: 16px;
+      }
+
+      .feature-media {
+        width: 100%;
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .feature-content {
+        width: 90%;
+        margin: -40px auto 0 !important;
+        padding: 40px 24px;
+        text-align: center;
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .btn-watch { margin: 0 auto; }
+
+      .estate-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .estate-text .section-eyebrow,
+      .estate-text .section-title { text-align: center; }
+
+      .estate-image { aspect-ratio: 16 / 10; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-inner { flex-direction: column; }
+
+      .close-modal { top: -40px; right: 10px; }
+
+      .statement { padding: 100px 24px; }
+      .magazine-section,
+      .estate,
+      .heritage,
+      .inquiry { padding: 80px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <a class="nav-logo" href="#">STRANDŌEN</a>
+    <span class="nav-center">Djursholm Private Island &nbsp;|&nbsp; Stockholm</span>
+    <div class="nav-right">
+      <a class="nav-link" href="#estate">The Estate</a>
+      <a class="nav-link" href="#archive">Archive</a>
+      <a class="nav-cta" href="#inquiry">Private Inquiry</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a href="#estate" class="mobile-link">The Estate</a>
+    <a href="#archive" class="mobile-link">Archive</a>
+    <a href="#heritage" class="mobile-link">Heritage</a>
+    <a href="#inquiry" class="mobile-link">Private Inquiry</a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-media">
+      <div class="hero-video-slot">
+        <video
+          id="heroVideo"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+        >
+          <source src="videos/hero.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">EST. 1897 — DJURSHOLM ARCHIPELAGO</p>
+      <h1 class="hero-title">Your Private world<br>15 minutes from city center</h1>
+      <p class="hero-sub">The Ultimate Trophy Property — Total Sovereignty Meets Global Access</p>
+      <div class="hero-btns">
+        <a class="btn-primary" href="#inquiry">Inquire Privately</a>
+        <a class="btn-ghost" href="#archive">Enter The Living Archive</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="magazine-section" id="archive">
+    <div class="reveal" style="margin-bottom: 90px; text-align: center;">
+      <p class="section-eyebrow">The Living Magazine</p>
+      <h2 class="section-title">Strandöen in Motion</h2>
+      <p class="section-sub" style="max-width: 620px;">
+        Three cinematic chapters. Each one a meditation on time, privacy, and the rare art of true separation.
+      </p>
+    </div>
+
+    <div class="video-feature reveal" id="chapter01Feature">
+      <div class="feature-media">
+        <div class="feature-media-inner is-inline">
+          <video
+            id="chapter01Video"
+            class="inline-chapter-video"
+            muted
+            playsinline
+            loop
+            preload="metadata"
+            disablepictureinpicture
+            disableremoteplayback
+          >
+            <source src="videos/chapter-01.mov" type="video/quicktime">
+            <source src="videos/chapter-01.mov" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="feature-content">
+        <div class="feature-chapter">01 / The Approach</div>
+        <h3 class="feature-title">A world-class asset that can never be bought again.</h3>
+        <p class="feature-desc">
+          For decades this island existed in absolute secrecy — a highly classified military installation designed to remain hidden, strictly off-limits to the public, and protected by layers of state mystery. Today, for the first time in history, this impenetrable fortress is available for private acquisition.
+        </p>
+      </div>
+    </div>
+
+    <div class="video-feature reverse reveal" id="chapter02Feature">
+      <div class="feature-media">
+        <div class="feature-media-inner is-inline">
+          <video
+            id="chapter02Video"
+            class="inline-chapter-video"
+            muted
+            playsinline
+            loop
+            preload="metadata"
+            disablepictureinpicture
+            disableremoteplayback
+          >
+            <source src="videos/chapter-02.mov" type="video/quicktime">
+            <source src="videos/chapter-02.mov" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="feature-content">
+        <div class="feature-chapter">02 / Echoes of the Forest</div>
+        <h3 class="feature-title">Positioned just minutes from the heart of Stockholm, yet completely concealed from the world.</h3>
+        <p class="feature-desc">
+          It offers what no other private island on Earth can claim: deep-water superyacht docking and a private helipad in such immediate proximity to a major European capital.
+        </p>
+        <p class="feature-desc">
+          The thrill of the forbidden. The power of absolute privacy. The freedom of seamless global access.
+        </p>
+        <p class="feature-desc">
+          A rare canvas of strategic significance and natural seclusion, ready to be transformed into your personal paradise.
+        </p>
+      </div>
+    </div>
+
+    <div class="video-feature reveal" id="chapter03Feature">
+      <div class="feature-media">
+        <div class="feature-media-inner is-inline">
+          <video
+            id="chapter03Video"
+            class="inline-chapter-video"
+            muted
+            playsinline
+            loop
+            preload="metadata"
+            disablepictureinpicture
+            disableremoteplayback
+          >
+            <source src="videos/chapter-03.mov" type="video/quicktime">
+            <source src="videos/chapter-03.mov" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="feature-content">
+        <div class="feature-chapter">03 / The Shoreline</div>
+        <h3 class="feature-title">Granite & Tide</h3>
+        <p class="feature-desc">
+          The Baltic moves against stone that predates every structure on the island. At dusk, the water turns the colour of pewter and the horizon dissolves. Here, the boundary between land and sea becomes a meditation on permanence.
+        </p>
+        <div class="feature-meta">Coastal Cinematography · 2:55</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="estate" id="estate">
+    <div class="estate-grid">
+      <div class="estate-image reveal">
+        <img
+          src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop"
+          alt="Granite shoreline of a private Scandinavian island"
+          loading="lazy"
+        >
+      </div>
+      <div class="estate-text reveal">
+        <p class="section-eyebrow">The Estate</p>
+        <h2 class="section-title">Sovereignty by Design</h2>
+        <p class="estate-body">
+          Strandöen occupies a singular position in the Nordic property landscape — a fully private island within commuting distance of Stockholm's global financial centre. Ancient pines, granite cliffs, and protected shoreline create an environment of absolute seclusion, while Arlanda International Airport remains within reach.
+        </p>
+        <div class="estate-stats">
+          <div class="stat-item">
+            <div class="stat-value">4.2</div>
+            <div class="stat-label">Hectares · Private Island</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1897</div>
+            <div class="stat-label">Year Established</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">15</div>
+            <div class="stat-label">Minutes to Stockholm</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Owner in 127 Years</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="heritage" id="heritage">
+    <div class="reveal" style="margin-bottom: 60px;">
+      <p class="section-eyebrow">Heritage</p>
+      <h2 class="section-title">A Century of Privacy</h2>
+      <p class="section-sub">Strandöen has passed through a single lineage since its establishment as a private domain.</p>
+    </div>
+    <div class="heritage-timeline reveal">
+      <div class="timeline-item">
+        <div class="timeline-year">1897</div>
+        <p class="timeline-text">The island is formally established as a private estate within the Djursholm archipelago, one of the earliest recorded private island holdings in the Stockholm region.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1920s</div>
+        <p class="timeline-text">The main residence is completed in the Nordic National Romantic style, designed to disappear into the forest canopy and granite terrain.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1960s</div>
+        <p class="timeline-text">Infrastructure modernised discreetly — private dock, generator systems, and telecommunications — without altering the island's essential character.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">Today</div>
+        <p class="timeline-text">Strandöen enters a new chapter. Offered privately to a select audience of qualified buyers who understand the distinction between property and sovereignty.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="inquiry" id="inquiry">
+    <div class="inquiry-inner reveal">
+      <p class="section-eyebrow">Private Inquiry</p>
+      <h2 class="section-title">Begin the Conversation</h2>
+      <p class="section-sub">
+        Strandöen is presented exclusively to qualified buyers. All inquiries are handled with absolute discretion.
+      </p>
+      <form class="inquiry-form" id="inquiryForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Your first name" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Your last name" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="interest">Nature of Interest</label>
+          <select id="interest" name="interest" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="acquisition">Private Acquisition</option>
+            <option value="viewing">Confidential Viewing</option>
+            <option value="advisor">Representing a Client</option>
+            <option value="media">Media / Press</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Share your interest in Strandöen…"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Private Inquiry</button>
+        <p class="form-note">Your information will never be shared. A representative will respond within 48 hours.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="statement reveal">
+    <blockquote class="statement-quote">
+      "There are places that exist outside of time. Strandöen is one of them — a sovereign realm where the Baltic whispers against granite shores unchanged for millennia."
+    </blockquote>
+    <p class="statement-attribution">Private Island · Stockholm Archipelago</p>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Strandōen</div>
+        <p class="footer-tagline">Djursholm Private Island<br>Stockholm Archipelago, Sweden</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="#estate">The Estate</a>
+        <a href="#archive">Living Archive</a>
+        <a href="#heritage">Heritage</a>
+        <a href="#inquiry">Private Inquiry</a>
+      </div>
+      <div class="footer-col">
+        <h4>Representation</h4>
+        <p>Presented by Private Island Advisory</p>
+        <p>Stockholm · London · Geneva</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Strandōen. All rights reserved.</span>
+      <span>Confidential Offering</span>
+    </div>
+  </footer>
+
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Video player">
+    <div class="modal-content">
+      <button class="close-modal" id="closeModal">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="stroke:currentColor; fill:none; stroke-width:2;">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Close
+      </button>
+      <video id="modalVideoPlayer" controls playsinline>
+        <source id="modalVideoSource" src="" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+  </div>
+
+  <script>
+    // Hero video — start at 0:18, fade in, freeze on the first cut at 0:33
+    (function initHeroVideo() {
+      const heroVideo = document.getElementById('heroVideo');
+      if (!heroVideo) return;
+
+      const START_AT = 18; // 0:18 — opening frame
+      const FREEZE_AT = 33; // 0:33 — first cut
+      let hasFadedIn = false;
+      let hasBegun = false;
+      let isFrozen = false;
+
+      function fadeIn() {
+        if (hasFadedIn) return;
+        hasFadedIn = true;
+        heroVideo.classList.add('is-visible');
+      }
+
+      function freezeFrame() {
+        if (isFrozen) return;
+        isFrozen = true;
+        heroVideo.pause();
+        heroVideo.currentTime = FREEZE_AT;
+        heroVideo.classList.add('is-visible', 'is-frozen');
+      }
+
+      function onTimeUpdate() {
+        if (heroVideo.currentTime >= FREEZE_AT) {
+          heroVideo.removeEventListener('timeupdate', onTimeUpdate);
+          freezeFrame();
+        }
+      }
+
+      function tryPlay() {
+        if (!isFrozen && heroVideo.paused) {
+          heroVideo.play().catch(() => {});
+        }
+      }
+
+      function beginPlayback() {
+        if (isFrozen || hasBegun) return;
+        hasBegun = true;
+        heroVideo.currentTime = START_AT;
+        tryPlay();
+        fadeIn();
+      }
+
+      heroVideo.addEventListener('loadedmetadata', beginPlayback);
+      heroVideo.addEventListener('playing', fadeIn);
+      heroVideo.addEventListener('timeupdate', onTimeUpdate);
+
+      heroVideo.addEventListener('error', () => {
+        if (isFrozen) return;
+        hasBegun = false;
+        heroVideo.load();
+        setTimeout(beginPlayback, 400);
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) tryPlay();
+      });
+
+      window.addEventListener('focus', tryPlay);
+
+      const heroSection = document.querySelector('.hero');
+      if (heroSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) tryPlay();
+          });
+        }, { threshold: 0.1 }).observe(heroSection);
+      }
+
+      if (heroVideo.readyState >= 1) beginPlayback();
+    })();
+
+    // Inline chapter videos — autoplay on scroll, loop continuously
+    function initInlineChapterVideo(featureId, videoId) {
+      const chapterFeature = document.getElementById(featureId);
+      const video = document.getElementById(videoId);
+      if (!chapterFeature || !video) return;
+
+      let hasBegun = false;
+
+      function beginPlayback() {
+        if (hasBegun) return;
+        hasBegun = true;
+        video.preload = 'auto';
+        video.play().catch(() => { hasBegun = false; });
+      }
+
+      function preloadVideo() {
+        if (hasBegun) return;
+        video.preload = 'auto';
+        video.load();
+      }
+
+      video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      });
+
+      if ('IntersectionObserver' in window) {
+        const preloadObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) preloadVideo();
+          });
+        }, { rootMargin: '300px 0px', threshold: 0 });
+
+        const playObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+              beginPlayback();
+              playObserver.disconnect();
+              preloadObserver.disconnect();
+            }
+          });
+        }, { threshold: [0, 0.35, 0.5] });
+
+        preloadObserver.observe(chapterFeature);
+        playObserver.observe(chapterFeature);
+      } else {
+        beginPlayback();
+      }
+    }
+
+    initInlineChapterVideo('chapter01Feature', 'chapter01Video');
+    initInlineChapterVideo('chapter02Feature', 'chapter02Video');
+    initInlineChapterVideo('chapter03Feature', 'chapter03Video');
+
+    // Nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    navToggle.addEventListener('click', openMenu);
+    mobileClose.addEventListener('click', closeMenu);
+    mobileMenu.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Video modal
+    const modal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+    const videoSource = document.getElementById('modalVideoSource');
+    const closeBtn = document.getElementById('closeModal');
+    const playTriggers = document.querySelectorAll('.open-video');
+
+    playTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const src = trigger.getAttribute('data-video-src');
+        videoSource.setAttribute('src', src);
+        videoPlayer.load();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => videoPlayer.play().catch(() => {}), 300);
+      });
+    });
+
+    const closeModalFunc = () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      videoPlayer.pause();
+      videoSource.setAttribute('src', '');
+    };
+
+    closeBtn.addEventListener('click', closeModalFunc);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModalFunc();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeModalFunc();
+    });
+
+    // Inquiry form
+    document.getElementById('inquiryForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      const original = btn.textContent;
+      btn.textContent = 'Inquiry Received';
+      btn.style.background = 'var(--gold-muted)';
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+        e.target.reset();
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
