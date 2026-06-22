@@ -1092,6 +1092,7 @@
       <div class="hero-video-slot">
         <video
           id="heroVideo"
+          autoplay
           muted
           playsinline
           preload="auto"
@@ -1100,6 +1101,7 @@
         >
           <source src="videos/hero.mp4" type="video/mp4">
         </video>
+        <script>document.getElementById('heroVideo')?.play().catch(function(){});</script>
       </div>
     </div>
     <div class="hero-overlay"></div>
@@ -1376,17 +1378,19 @@
       if (e.persisted) window.scrollTo(0, 0);
     });
 
-    // Hero video — preload, play immediately, smooth fade-in, freeze at end
+    // Hero video — autoplay immediately, fade in on first frame, freeze at end
     (function initHeroVideo() {
       const hero = document.querySelector('.hero');
       const heroVideo = document.getElementById('heroVideo');
       if (!hero || !heroVideo) return;
 
       const FREEZE_AT = 14.9;
-      let hasBegun = false;
       let isFrozen = false;
+      let hasRevealed = false;
 
       function revealHero() {
+        if (hasRevealed) return;
+        hasRevealed = true;
         heroVideo.classList.add('is-visible');
         hero.classList.add('is-ready');
       }
@@ -1396,8 +1400,8 @@
         isFrozen = true;
         heroVideo.pause();
         heroVideo.currentTime = FREEZE_AT;
-        heroVideo.classList.add('is-visible', 'is-frozen');
-        hero.classList.add('is-ready');
+        revealHero();
+        heroVideo.classList.add('is-frozen');
       }
 
       function onTimeUpdate() {
@@ -1407,35 +1411,24 @@
         }
       }
 
-      function startHero() {
-        if (isFrozen || hasBegun) return;
-        hasBegun = true;
-        heroVideo.play()
-          .then(revealHero)
-          .catch(() => { hasBegun = false; });
+      function playNow() {
+        if (isFrozen) return;
+        heroVideo.play().catch(() => {});
       }
 
-      heroVideo.addEventListener('canplaythrough', startHero, { once: true });
-      heroVideo.addEventListener('canplay', () => {
-        if (!hasBegun) startHero();
-      }, { once: true });
+      heroVideo.addEventListener('loadeddata', revealHero, { once: true });
+      heroVideo.addEventListener('playing', revealHero);
       heroVideo.addEventListener('timeupdate', onTimeUpdate);
       heroVideo.addEventListener('ended', freezeFrame);
 
-      heroVideo.addEventListener('error', () => {
-        if (isFrozen) return;
-        hasBegun = false;
-        heroVideo.load();
-      });
+      heroVideo.addEventListener('canplay', playNow, { once: true });
+      playNow();
+
+      if (heroVideo.readyState >= 2) revealHero();
 
       document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && hasBegun && !isFrozen && heroVideo.paused) {
-          heroVideo.play().catch(() => {});
-        }
+        if (!document.hidden && !isFrozen) playNow();
       });
-
-      heroVideo.load();
-      if (heroVideo.readyState >= 3) startHero();
     })();
 
     // Inline chapter videos — preload early, play smoothly on scroll
