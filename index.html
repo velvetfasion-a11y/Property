@@ -1092,6 +1092,8 @@
       <div class="hero-video-slot">
         <video
           id="heroVideo"
+          data-ai-target="hero-video"
+          data-ai-label="Hero video"
           autoplay
           muted
           playsinline
@@ -1222,6 +1224,8 @@
     <div class="estate-grid">
       <div class="estate-image reveal">
         <img
+          data-ai-target="estate-image"
+          data-ai-label="Estate image"
           src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop"
           alt="Granite shoreline of a private Scandinavian island"
           loading="lazy"
@@ -1384,7 +1388,7 @@
       const heroVideo = document.getElementById('heroVideo');
       if (!hero || !heroVideo) return;
 
-      const FREEZE_AT = 14.9;
+      const FREEZE_AT = 22;
       let isFrozen = false;
       let hasRevealed = false;
 
@@ -1586,6 +1590,9 @@
       }
     });
   </script>
+
+  <script src="ai-config.js"></script>
+  <script src="ai-assistant.js"></script>
 
 </body>
 </html>
